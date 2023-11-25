@@ -17,6 +17,11 @@ The project has two endpoints to consume each carry out specific business functi
 curl -H "Content-Type: application/json" -X POST http://localhost:8080/api/v1/urls/www.dkb.de
 ```
 
+### Receiving long url
+```bash
+curl -H "Content-Type: application/json" http://localhost:8080/api/v1/urls/9e50ade
+```
+
 ## Running the Project
 in the command line issue the following command.
 ```bash

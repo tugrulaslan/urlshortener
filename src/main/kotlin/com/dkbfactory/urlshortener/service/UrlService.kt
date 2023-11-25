@@ -15,4 +15,6 @@ class UrlService(private val urlRepository: UrlRepository) {
         }
         return "tinyurl.com/$shortUrlHash"
     }
+
+    fun retrieveUrl(hash: String) = urlRepository.findByUrlHash(hash)
 }

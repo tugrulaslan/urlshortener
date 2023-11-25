@@ -37,4 +37,19 @@ class UrlServiceTest {
         assertThat(persistedEntitySlot.captured.urlHash).isEqualTo(shortUrl)
         assertThat(persistedEntitySlot.captured.longUrl).isEqualTo(longUrl)
     }
+
+    @Test
+    fun `should find url by url hash`() {
+        //given
+        val urlHash = "abc1235"
+        val longUrl = "www.dkb.de/offers/black-friday"
+        every { repository.findByUrlHash(eq(urlHash)) } returns UrlEntity(urlHash, longUrl)
+
+        //when
+        val urlEntity = service.retrieveUrl(urlHash)!!
+
+        //then
+        assertThat(urlEntity.urlHash).isEqualTo(urlHash)
+        assertThat(urlEntity.longUrl).isEqualTo(longUrl)
+    }
 }
