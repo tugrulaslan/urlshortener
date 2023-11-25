@@ -2,6 +2,7 @@ package com.dkbfactory.urlshortener.controller
 
 import com.dkbfactory.urlshortener.UrlshortenerApplication
 import com.dkbfactory.urlshortener.controller.dto.ShortUrlResponse
+import com.dkbfactory.urlshortener.repository.UrlRepository
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -16,7 +17,8 @@ import org.springframework.test.web.servlet.post
 @AutoConfigureMockMvc
 class UrlShortenerControllerTest(
     @Autowired private val mockMvc: MockMvc,
-    @Autowired private val mapper: ObjectMapper
+    @Autowired private val mapper: ObjectMapper,
+    @Autowired private val repository: UrlRepository
 ) {
 
     @Test
@@ -34,6 +36,10 @@ class UrlShortenerControllerTest(
         //then
         val shortUrlResponse =
             mapper.readValue(response.response.contentAsString, ShortUrlResponse::class.java)
-        assertThat(shortUrlResponse.shortUrl).isEqualTo("tinyurl.com/abc123")
+        val expectedShortUrlHash = "9e50ade"
+        assertThat(shortUrlResponse.shortUrl).isEqualTo("tinyurl.com/$expectedShortUrlHash")
+        val urlEntity = repository.findByUrlHash(expectedShortUrlHash)!!
+        assertThat(urlEntity.urlHash).isEqualTo(expectedShortUrlHash)
+        assertThat(urlEntity.longUrl).isEqualTo(longUrl)
     }
 }

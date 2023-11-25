@@ -1,6 +1,7 @@
 package com.dkbfactory.urlshortener.controller
 
 import com.dkbfactory.urlshortener.controller.dto.ShortUrlResponse
+import com.dkbfactory.urlshortener.service.UrlService
 import jakarta.validation.constraints.NotBlank
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
@@ -14,13 +15,13 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 @RequestMapping("/api/v1/urls")
 @Validated
-class UrlShortenerController {
+class UrlShortenerController(private val urlService: UrlService) {
 
     @PostMapping(
         "/{url}", consumes = [MediaType.APPLICATION_JSON_VALUE],
         produces = [MediaType.APPLICATION_JSON_VALUE]
     )
     fun createUrl(@PathVariable("url") @NotBlank url: String): ResponseEntity<ShortUrlResponse> {
-        return ResponseEntity(ShortUrlResponse("tinyurl.com/abc123"), HttpStatus.CREATED)
+        return ResponseEntity(ShortUrlResponse(urlService.shorten(url)), HttpStatus.CREATED)
     }
 }
